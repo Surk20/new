@@ -166,3 +166,252 @@ class _MyLoginpageState extends State<MyLoginpage> {
     );
   }
 }
+
+
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../utils/utils.dart';
+import '../widget/text_field_input.dart';
+
+
+class DetailScreen extends StatefulWidget {
+  const DetailScreen({Key? key}) : super(key: key);
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _adhaarController = TextEditingController();
+  final TextEditingController _nameController =  TextEditingController();
+  final TextEditingController _typeController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _squareftController = TextEditingController();
+  final TextEditingController _pincodeController  = TextEditingController();
+  final TextEditingController _wardnoController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
+  bool _isLoading = false;
+  Uint8List? _image;
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _emailController.dispose();
+  //   _passwordController.dispose();
+  //   _usernameController.dispose();
+  // }
+  //
+  // void signUpUser() async {
+  //   // set loading to true
+  //   setState(() {
+  //     _isLoading = true;
+  //   });
+
+  // signup user using our authmethodds
+  //   String res = await AuthMethods().signUpUser(
+  //       email: _emailController.text,
+  //       password: _passwordController.text,
+  //       username: _usernameController.text,
+  //       bio: _bioController.text,
+  //       file: _image!);
+  //   // if string returned is sucess, user has been created
+  //   if (res == "success") {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     // navigate to the home screen
+  //     if (context.mounted) {
+  //       Navigator.of(context).pushReplacement(
+  //         MaterialPageRoute(
+  //           builder: (context) => const ResponsiveLayout(
+  //             mobileScreenLayout: MobileScreenLayout(),
+  //             webScreenLayout: WebScreenLayout(),
+  //           ),
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     // show the error
+  //     if (context.mounted) {
+  //       showSnackBar(context, res);
+  //     }
+  //   }
+  // }
+
+  selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    // set state because we need to display the image we selected on the circle avatar
+    setState(() {
+      _image = im;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('House Details'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        // width: double.infinity,
+        // height: double.infinity,
+        // child: SingleChildScrollView(
+        //   scrollDirection: Axis.vertical,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // const SizedBox(
+            //   height: 64,
+            // ),
+            Stack(
+              children: [
+                _image != null
+                    ? CircleAvatar(
+                  radius: 64,
+                  backgroundImage: MemoryImage(_image!),
+                  backgroundColor: Colors.red,
+                )
+                    : const CircleAvatar(
+                  radius: 64,
+                  backgroundImage: NetworkImage(
+                      'https://i.stack.imgur.com/l60Hf.png'),
+                  backgroundColor: Colors.red,
+                ),
+                Positioned(
+                  bottom: -10,
+                  left: 80,
+                  child: IconButton(
+                    onPressed: selectImage,
+                    icon: const Icon(Icons.add_a_photo),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextFieldInput(
+              hintText: 'Enter user address',
+              textInputType: TextInputType.streetAddress,
+              textEditingController: _addressController,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextFieldInput(
+              hintText: 'Enter pincode',
+              textInputType: TextInputType.number,
+              textEditingController: _pincodeController,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextFieldInput(
+                  hintText: 'Enter Latitude',
+                  textInputType: TextInputType.number,
+                  textEditingController: _latitudeController,
+                ),
+                TextFieldInput(
+                  hintText: 'Enter Longitude',
+                  textInputType: TextInputType.number,
+                  textEditingController: _longitudeController,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextFieldInput(
+              hintText: 'Enter ward number',
+              textInputType: TextInputType.number,
+              textEditingController: _wardnoController,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextFieldInput(
+              hintText: "Enter Owner's name",
+              textInputType: TextInputType.name,
+              textEditingController: _nameController,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextFieldInput(
+              hintText: 'Enter adhaar number',
+              textInputType: TextInputType.number,
+              textEditingController: _adhaarController,
+              isPass: true,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextFieldInput(
+              hintText: 'Enter phone number',
+              textInputType: TextInputType.phone,
+              textEditingController: _phoneController,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextFieldInput(
+              hintText: 'Enter square feet area',
+              textInputType: TextInputType.number,
+              textEditingController: _squareftController,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            TextFieldInput(
+              hintText: 'Enter house type(Commercial/Residential)',
+              textInputType: TextInputType.text,
+              textEditingController: _typeController,
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            InkWell(
+              // onTap: signUpUser,
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: const ShapeDecoration(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(4)),
+                  ),
+                  color: Colors.blue,
+                ),
+                child: !_isLoading
+                    ? const Text(
+                  'Submit',
+                )
+                    : const CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+          ],
+        ),
+        //),
+      ),
+    );
+  }
+}
+
+
+
